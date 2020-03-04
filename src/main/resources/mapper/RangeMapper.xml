@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hsfw.performance.dao.RangeDao">
+    <select id="getRangeInfoByGameTypeCN" parameterType="java.lang.String" resultType="java.util.HashMap">
+    <if test="cellType=='person'">
+    SELECT
+	ue.account account,
+	ue.username name,
+if
+	( ue.sex = 1, '男', '女' ) sex,
+	gi.integral grade,
+	FLOOR(gi.integral/500)+1 level,
+	gi.victorys,
+	( gi.victorys + gi.dogfalls + gi.failures ) total,
+if
+	(
+		( gi.victorys + gi.dogfalls + gi.failures ) = 0,
+		0,
+		concat(
+			convert (
+				gi.victorys / ( gi.victorys + gi.dogfalls + gi.failures ) * 100,
+				decimal ( 15, 2 )
+			),
+			'%'
+		)
+	) winpercent
+FROM
+	gamestairinfo gi,
+	game gm,
+	gametype gt,
+	USER ue,
+	usergameinfo ug
+WHERE
+	gi.gameID = gm.id
+	AND gm.grade = gt.gameTypeCode
+	AND gt.gameTypeCN = #{gameTypeCN}
+	AND ue.ID = gi.gameUnitID
+	AND ug.UserID = ue.ID
+	</if>
+	<if test="cellType=='team'">
+		SELECT
+		team.teamnum account,
+		team.NAME name,
+		gi.integral grade,
+		FLOOR( gi.integral / 500 ) + 1 level,
+		gi.victorys,
+		( gi.victorys + gi.dogfalls + gi.failures ) total,
+		IF
+		(
+		( gi.victorys + gi.dogfalls + gi.failures ) = 0,
+		0,
+		CONCAT(
+		CONVERT (
+		gi.victorys / ( gi.victorys + gi.dogfalls + gi.failures ) * 100,
+		DECIMAL ( 15, 2 )
+		),
+		'%'
+		)
+		) winpercent
+		FROM
+		gamestairinfo gi,
+		game gm,
+		gametype gt,
+		gameteam team
+		WHERE
+		gi.gameID = gm.id
+		AND gm.grade = gt.gameTypeCode
+		AND gt.gameTypeCN = #{gameTypeCN}
+		AND team.ID = gi.gameUnitID
+	</if>
+
+
+	ORDER BY grade DESC,winpercent DESC  LIMIT 20
+    </select>
+</mapper>
