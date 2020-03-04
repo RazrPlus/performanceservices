@@ -28,7 +28,7 @@ FROM
 	gamestairinfo gi,
 	game gm,
 	gametype gt,
-	USER ue,
+	user ue,
 	usergameinfo ug
 WHERE
 	gi.gameID = gm.id
