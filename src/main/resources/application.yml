@@ -7,7 +7,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://39.107.47.222:3306/game_center?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&allowMultiQueries=true
     username: root
-    password: root
+    password: hsfw@110
 mybatis:
   #  mapper文件夹路径
   mapper-locations: classpath*:mapper/*.xml
