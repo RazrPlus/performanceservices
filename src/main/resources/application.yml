@@ -23,5 +23,5 @@ logging:
     com:
       hsfw:
         performance:
-#          dao: debug
+          dao: debug
 #设置mybatis执行sql的日志输出
